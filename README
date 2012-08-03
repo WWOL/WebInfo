@@ -1,4 +1,14 @@
 WebInfo project by Brian McCarthy (WWOL)
 
+This program runs as a server and binds to port 21000.
+To test it point your browser to 127.0.0.1:21000 on the same machine as the server is running.
+Use the arguments info=<type> to get info.
+For example:
+127.0.0.1:21000?info=cpu&info=ram
+This will show information about the cpu (number of cores) and the ram (total, free  etc).
+
+Have fun.
+
+Licence:
 Feel free to use the code how you like. 
 Educational, commercial, and derivatives are fine without attribution as long as you release any redistributions ander the same licence.
