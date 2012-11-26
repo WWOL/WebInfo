@@ -1,5 +1,7 @@
 package mccarthy.brian.webinfo;
 
+import java.io.File;
+
 /**
  * 
  * @author Brian McCarthy
@@ -12,14 +14,11 @@ public class InfoGetter {
 		switch(type) {
 		case RAM:
 			sb.append("Max Memory: ");
-			sb.append(Runtime.getRuntime().maxMemory() / 1024 / 1024);
-			sb.append(" (MB)");
+			sb.append(formatBytes(Runtime.getRuntime().maxMemory()));
 			sb.append("<br />Free Memory: ");
-			sb.append(Runtime.getRuntime().freeMemory() / 1024 / 1024);
-			sb.append(" (MB)");
+			sb.append(formatBytes(Runtime.getRuntime().freeMemory()));
 			sb.append("<br />Total Memory: ");
-			sb.append(Runtime.getRuntime().totalMemory() / 1024 / 1024);
-			sb.append(" (MB)");
+			sb.append(formatBytes(Runtime.getRuntime().totalMemory()));
 			break;
 		case CPU:
 			sb.append("Processors: ");
@@ -36,13 +35,54 @@ public class InfoGetter {
 			sb.append(System.getProperty("user.name"));
 			break;
 		case HDD:
-			sb.append("HDD IS UNIPLIMENTED!");
+			File file = File.listRoots()[0];
+			sb.append("Free Space: ");
+			sb.append(formatBytes(file.getFreeSpace()));
+			sb.append("<br /> Total Space: ");
+			sb.append(formatBytes(file.getTotalSpace()));
+			sb.append("<br /> Usable Space: ");
+			sb.append(formatBytes(file.getUsableSpace()));
+			break;
+		case ALL:
+			for (InfoType info : InfoType.values()) {
+				if (info == InfoType.ALL) {
+					// Avoid StackOverflowException
+					continue;
+				}
+				sb.append(getInfo(info));
+				sb.append("<br /><br />");
+			}
 			break;
 		default:
 			sb.append("UNIPLIMENTED TYPE!");
+			break;
 		}
 			
 		return sb.toString();
+	}
+
+	/**
+	 * Format bytes into a readable format
+	 * @param bytes
+	 * @return Bytes as B, KB, MB, GB or TB. Return original as bytes if over 1024 TB.  
+	 */
+	public static String formatBytes(long bytes) {
+		long originalBytes = bytes;
+		String[] types = new String[]{" (B)", " (KB)", " (MB)", " (GB)", " (TB)"};
+		
+		int index = 0;
+		
+		while (bytes > 1024) {
+			bytes /= 1024;
+			index++;
+		}
+		String suffix = "";
+		try {
+			suffix = types[index];
+		} catch (Exception e) {
+			return originalBytes + types[0];
+		}
+		return bytes + suffix;//*/
 	}
 	
 }

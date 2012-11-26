@@ -24,9 +24,4 @@ public class HTMLPartPost implements HTMLPart {
 		return part;
 	}
 
-	@Override
-	public int getWeight() {
-		return 5;
-	}
-
 }

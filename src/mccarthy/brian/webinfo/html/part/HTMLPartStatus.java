@@ -26,10 +26,5 @@ public class HTMLPartStatus implements HTMLPart {
 	public String getStringPart() {
 		return part;
 	}
-
-	@Override
-	public int getWeight() {
-		return 4;
-	}
-
+	
 }

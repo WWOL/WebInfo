@@ -31,11 +31,5 @@ public class HTMLBodyGroup implements HTMLPart {
 		}
 		return sb.toString();
 	}
-
-	@Override
-	public int getWeight() {
-		return 3;
-	}
-	
 	
 }

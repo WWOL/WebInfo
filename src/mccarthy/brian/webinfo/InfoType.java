@@ -7,5 +7,6 @@ public enum InfoType {
 	JAVA,
 	OS,
 	HDD,
+	ALL;
 	
 }

@@ -9,6 +9,7 @@ import java.util.List;
 
 import mccarthy.brian.webinfo.html.HTMLBodyGroup;
 import mccarthy.brian.webinfo.html.HTMLConstructer;
+import mccarthy.brian.webinfo.html.HTMLErrorPage;
 import mccarthy.brian.webinfo.html.HTMLStatus;
 import mccarthy.brian.webinfo.html.part.HTMLPartBody;
 import mccarthy.brian.webinfo.html.part.HTMLPartHeader;
@@ -26,9 +27,11 @@ public class ThreadSocketReader extends Thread implements Shutdown {
 	WebInfo instance;
 	Socket socket;
 	BufferedReader reader;
+	BufferedWriter writer;
 	boolean running;
 	
 	public ThreadSocketReader(WebInfo instance, Socket socket) {
+		super("ThreadSocketReader_" + socket);
 		this.instance = instance;
 		this.socket = socket;
 		this.running = true;
@@ -37,32 +40,34 @@ public class ThreadSocketReader extends Thread implements Shutdown {
 	public void run() {
 		try {
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 		} catch (Exception e) {
 			running = false;
 		}
-		int lines = 0;
 		while(running) {
 			String line = null;
 		    try {
 				line = reader.readLine();
-				lines++;
 			} catch (Exception e) {
 				running = false;
 			}
 		    if (line == null) {
 		    	running = false;
 		    }
-		    process(line, lines);
+		    process(line);
 		}
 	}
 	
-	private void process(String line, int lineNum) {
+	private void process(String line) {
 		if (line == null) {
 			return;
 		}
 		System.out.println(line);
-		System.out.println("Line: " + lineNum);
 		if (line.startsWith("GET")) {
+			if (line.equalsIgnoreCase("GET / HTTP/1.1")) {
+				write(new HTMLErrorPage(HTMLStatus.BAD_REQUEST).getFullHTML());
+				return;
+			}
 			line = line.substring(6, line.length() - 9);
 			String[] args = line.split("&");
 			for (String arg : args) {
@@ -83,7 +88,7 @@ public class ThreadSocketReader extends Thread implements Shutdown {
 		HTMLPartPre pre = new HTMLPartPre();
 		HTMLPartWelcome welcome = new HTMLPartWelcome();
 		HTMLBodyGroup bodyGroup = new HTMLBodyGroup();
-		HTMLPartStatus bodyStatus = new HTMLPartStatus(status);
+		HTMLPartStatus bodyStatus;
 		HTMLPartPost post = new HTMLPartPost();
 		
 		List<InfoType> infos = args.getInfoTypes();
@@ -99,6 +104,8 @@ public class ThreadSocketReader extends Thread implements Shutdown {
 			status = HTMLStatus.BAD_REQUEST;
 		}
 		
+		bodyStatus = new HTMLPartStatus(status);
+		
 		html.addPart(header);
 		html.addPart(pre);
 		html.addPart(welcome);
@@ -111,9 +118,7 @@ public class ThreadSocketReader extends Thread implements Shutdown {
 	}
 	
 	public void write(String line) {
-		BufferedWriter writer;
 	    try {
-	    	writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 	    	writer.write(line);
 	    	writer.flush();
 	    	writer.close();

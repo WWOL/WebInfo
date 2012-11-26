@@ -25,9 +25,4 @@ public class HTMLPartPre implements HTMLPart {
 		return part;
 	}
 
-	@Override
-	public int getWeight() {
-		return 1;
-	}
-
 }

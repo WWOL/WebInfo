@@ -13,6 +13,7 @@ public interface HTMLPart {
 		HEADER,
 		PRE,
 		WELCOME,
+		ERROR,
 		BODY,
 		BODY_GROUP,
 		INFO,
@@ -23,7 +24,5 @@ public interface HTMLPart {
 	public Type getType();
 	
 	public String getStringPart();
-	
-	public int getWeight();
 	
 }

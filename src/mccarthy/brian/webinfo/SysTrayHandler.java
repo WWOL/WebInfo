@@ -11,16 +11,16 @@ import java.awt.event.ActionListener;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
-public class SysTrayHandler implements ActionListener {
+public class SysTrayHandler implements ActionListener, Shutdown {
 	
-	private WebInfo instance;
+	private TrayIcon icon;
 	
 	MenuItem menuItem_Close;
 	MenuItem menuItem_Version;
 	MenuItem menuItem_About;
+	MenuItem menuItem_ChangeLog;
 	
-	public void initSysTray(WebInfo instance) {
-		this.instance = instance;
+	public void initSysTray() {
 		if (SystemTray.isSupported()) {
 			SystemTray tray = SystemTray.getSystemTray();
 			Image image;
@@ -34,17 +34,20 @@ public class SysTrayHandler implements ActionListener {
 			menuItem_Close = new MenuItem("Close");
 			menuItem_Version = new MenuItem("Version");
 			menuItem_About = new MenuItem("About");
+			menuItem_ChangeLog = new MenuItem("Change Log");
 			
 			menu.add(menuItem_Close);
 			menu.add(menuItem_Version);
 			menu.add(menuItem_About);
+			menu.add(menuItem_ChangeLog);
 			
 			//menu.addActionListener(this);
 			menuItem_Close.addActionListener(this);
 			menuItem_Version.addActionListener(this);
 			menuItem_About.addActionListener(this);
+			menuItem_ChangeLog.addActionListener(this);
 			
-			TrayIcon icon = new TrayIcon(image, "WebInfo V:" + WebInfo.VERSION, menu);
+			icon = new TrayIcon(image, "WebInfo V:" + WebInfo.VERSION, menu);
 			
 			try {
 				tray.add(icon);
@@ -68,6 +71,17 @@ public class SysTrayHandler implements ActionListener {
 			}
 		} else if (event.getSource().equals(menuItem_Version)) {
 			JOptionPane.showMessageDialog(null, "WebInfo V:" + WebInfo.VERSION);
+		} else if (event.getSource().equals(menuItem_ChangeLog)) {
+			JOptionPane.showMessageDialog(null, "Change Log:\n1.0:\nInitial Release\n\n1.1:\nRemoved ");
+		}
+	}
+
+	@Override
+	public void shutdown() {
+		try {
+			SystemTray.getSystemTray().remove(icon);
+		} catch (Exception e) {
+			;
 		}
 	}
 }

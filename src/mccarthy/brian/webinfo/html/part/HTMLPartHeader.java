@@ -33,9 +33,6 @@ public class HTMLPartHeader implements HTMLPart {
 		sb.append("Last-Modified: ");
 		sb.append(date);
 		sb.append(NEW_LINE);
-		sb.append("Etag: \"3f80f-1b6-3e1cb03b\"\r\n");
-		sb.append("Accept-Ranges:  none\r\n");
-		sb.append("Content-Length: 438\r\n");
 		sb.append("Connection: keep-alive\r\n");
 		sb.append("Content-Type: text/html; charset=UTF-8");
 		sb.append(NEW_LINE);
@@ -51,11 +48,6 @@ public class HTMLPartHeader implements HTMLPart {
 	@Override
 	public String getStringPart() {
 		return part;
-	}
-
-	@Override
-	public int getWeight() {
-		return 0;
 	}
  
 }

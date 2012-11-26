@@ -10,7 +10,7 @@ public class HTMLPartWelcome implements HTMLPart {
 	private String part = "";
 
 	public HTMLPartWelcome() {
-		part = "<h1>Welcome to WebInfo</h1>";
+		part = "<h1>Welcome to <font color=Lime>WebInfo</font></h1><h6><a href=http://wwol.github.com>By Brian McCarthy (WWOL)</a></h6><br />";
 		//TODO Add welcome image? Slow.
 	}
 
@@ -22,11 +22,6 @@ public class HTMLPartWelcome implements HTMLPart {
 	@Override
 	public String getStringPart() {
 		return part;
-	}
-
-	@Override
-	public int getWeight() {
-		return 2;
 	}
 
 }

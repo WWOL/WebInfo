@@ -11,11 +11,8 @@ public class Arguments {
 	
 	static {
 		ARGUMENTS = new ArrayList<String>();
-		ARGUMENTS.add("user");
-		ARGUMENTS.add("pass");
 		ARGUMENTS.add("info");
-		ARGUMENTS.add("close");
-		ARGUMENTS.add("shutdown");
+		ARGUMENTS.add("help");
 	}
 	
 	public Arguments(String[] argsArray) {
@@ -35,7 +32,6 @@ public class Arguments {
 	private void phrase(String[] argsArray) {
 		for (String arg : argsArray) {
 			System.out.println("Pharseing arg: " + arg);
-			System.out.println("Pharseing arg2: " + arg);
 			if (ARGUMENTS.contains(arg.split("=")[0].toLowerCase())) {
 				args.add(arg);
 			} else {
